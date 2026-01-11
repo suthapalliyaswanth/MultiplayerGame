@@ -1,0 +1,99 @@
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.9);
+
+  /* Modern Dark Theme Palette */
+  --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  --primary-color: #646cff;
+  --accent-p1: #bd00ff;
+  /* Neon Purple */
+  --accent-p1-glow: 0 0 15px rgba(189, 0, 255, 0.6);
+  --accent-p2: #00e5ff;
+  /* Cyan Neon */
+  --accent-p2-glow: 0 0 15px rgba(0, 229, 255, 0.6);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg-gradient);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  background: -webkit-linear-gradient(45deg, #c471ed, #f64f59);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+button {
+  border-radius: 12px;
+  border: var(--glass-border);
+  padding: 0.8em 1.6em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--accent-p2);
+}
+
+/* Reset Links */
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}

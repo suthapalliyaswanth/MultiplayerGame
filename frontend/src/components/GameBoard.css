@@ -1,0 +1,101 @@
+.game-board {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.1);
+  /* Frosted Glass */
+  backdrop-filter: blur(12px);
+  padding: 15px;
+  border-radius: 20px;
+  width: fit-content;
+  margin: 2rem auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  margin: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  /* Darker pockets */
+  border-radius: 50%;
+  /* Make the cell hole round */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  overflow: hidden;
+  /* Important for animations */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  /* Inner shadow for depth */
+}
+
+.cell:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.cell .disc {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  animation: drop 0.5s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+  box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Animations */
+@keyframes drop {
+  from {
+    transform: translateY(-500px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.disc-P1 {
+  background: var(--accent-p1);
+  box-shadow: var(--accent-p1-glow), inset 0 -4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.disc-P2 {
+  background: var(--accent-p2);
+  box-shadow: var(--accent-p2-glow), inset 0 -4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.winner-banner {
+  margin-top: 20px;
+  font-size: 24px;
+  color: white;
+  font-weight: 800;
+  text-align: center;
+  padding: 10px;
+  background: rgba(0, 255, 100, 0.2);
+  border: 1px solid rgba(0, 255, 100, 0.5);
+  border-radius: 12px;
+  text-shadow: 0 0 10px rgba(0, 255, 100, 0.8);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

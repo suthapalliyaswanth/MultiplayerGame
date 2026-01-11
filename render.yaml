@@ -1,0 +1,38 @@
+services:
+  # Backend Service
+  - type: web
+    name: multiplayer-backend
+    env: go
+    region: singapore # Optional: Choose close to you
+    buildCommand: cd backend && go build -o app .
+    startCommand: cd backend && ./app
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: multiplayer-db
+          property: connectionString
+
+  # Frontend Service
+  - type: static
+    name: multiplayer-frontend
+    env: static
+    region: singapore
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: multiplayer-backend
+          property: url
+
+databases:
+  # Postgres Database
+  - name: multiplayer-db
+    region: singapore
+    databaseName: gamedb
+    user: user
+
+version: "1"
