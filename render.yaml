@@ -16,7 +16,7 @@ services:
           property: connectionString
 
   # Frontend Service
-  - type: static
+  - type: pwa
     name: multiplayer-frontend
     env: static
     region: singapore
