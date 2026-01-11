@@ -19,16 +19,13 @@ services:
   - type: web
     name: multiplayer-frontend
     env: static
-    region: singapore
+    # region: singapore # Static sites are global (CDN)
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: multiplayer-backend
-          property: url
+        value: https://replace-me-with-backend-url.onrender.com # Update this in Render Dashboard after deployment
 
 databases:
   # Postgres Database
