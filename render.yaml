@@ -3,9 +3,10 @@ services:
   - type: web
     name: multiplayer-backend
     env: go
-    region: singapore # Optional: Choose close to you
-    buildCommand: cd backend && go build -o app .
-    startCommand: cd backend && ./app
+    region: singapore
+    rootDir: backend
+    buildCommand: go build -o app .
+    startCommand: ./app
     envVars:
       - key: PORT
         value: 10000
@@ -19,8 +20,9 @@ services:
     name: multiplayer-frontend
     env: static
     region: singapore
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
         fromService:
