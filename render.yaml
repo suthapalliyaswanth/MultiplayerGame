@@ -4,9 +4,9 @@ services:
     name: multiplayer-backend
     env: go
     region: singapore
-    rootDir: backend
-    buildCommand: go build -o app .
-    startCommand: ./app
+    # Using explicit cd commands is safer if rootDir is ignored/missed
+    buildCommand: cd backend && go build -o app .
+    startCommand: cd backend && ./app
     envVars:
       - key: PORT
         value: 10000
@@ -20,9 +20,9 @@ services:
     name: multiplayer-frontend
     env: static
     region: singapore
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    # Using explicit cd commands
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
         fromService:
