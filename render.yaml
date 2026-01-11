@@ -15,14 +15,13 @@ services:
           name: multiplayer-db
           property: connectionString
 
+staticSites:
   # Frontend Service
-  - type: pwa
-    name: multiplayer-frontend
-    env: static
+  - name: multiplayer-frontend
     region: singapore
-    # Using explicit cd commands
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
         fromService:
