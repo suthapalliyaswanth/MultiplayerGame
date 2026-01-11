@@ -17,11 +17,12 @@ services:
 
 staticSites:
   # Frontend Service
-  - name: multiplayer-frontend
+  - type: static
+    name: multiplayer-frontend
     region: singapore
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    publishPath: dist
     envVars:
       - key: VITE_API_URL
         fromService:
