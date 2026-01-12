@@ -25,4 +25,15 @@ services:
       - key: VITE_API_URL
         value: https://replace-me-with-backend-url.onrender.com # Update this in Render Dashboard after deployment
 
+  # Analytics Service (Worker)
+  - type: worker
+    name: multiplayer-analytics
+    env: go
+    region: singapore
+    buildCommand: cd analytics && go build -o app .
+    startCommand: cd analytics && ./app
+    envVars:
+      - key: KAFKA_BROKER
+        sync: false # e.g. "pkc-xyz.us-east-1.aws.confluent.cloud:9092"
+
 version: "1"
