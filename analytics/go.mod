@@ -1,6 +1,6 @@
 module analytics-service
 
-go 1.25.5
+go 1.25.0
 
 require github.com/segmentio/kafka-go v0.4.49
 
