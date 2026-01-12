@@ -1,13 +1,12 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"log"
+	"net/http"
+	"os"
+	"sync"
 	"time"
-
-	"github.com/segmentio/kafka-go"
 )
 
 type GameEvent struct {
@@ -18,52 +17,58 @@ type GameEvent struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
+var (
+	totalGames int
+	p1Wins     int
+	p2Wins     int
+	mu         sync.Mutex
+)
+
+func eventHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var event GameEvent
+	if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	totalGames++
+	if event.Winner == "P1" {
+		p1Wins++
+	} else if event.Winner == "P2" {
+		p2Wins++
+	}
+
+	log.Printf(
+		"Event received | Game=%s Winner=%s | Total=%d P1=%d P2=%d",
+		event.GameID, event.Winner, totalGames, p1Wins, p2Wins,
+	)
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Analytics service running"))
+}
+
 func main() {
-	topic := "game_ended"
-	partition := 0
-
-	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{"localhost:9092"},
-		Topic:     topic,
-		Partition: partition,
-		MinBytes:  10e3, // 10KB
-		MaxBytes:  10e6, // 10MB
-	})
-
-	fmt.Println("Analytics Service Started. Listening for game events...")
-
-	var totalGames int
-	var p1Wins int
-	var p2Wins int
-
-	for {
-		m, err := r.ReadMessage(context.Background())
-		if err != nil {
-			break
-		}
-		
-		var event GameEvent
-		if err := json.Unmarshal(m.Value, &event); err != nil {
-			log.Printf("Error unmarshalling event: %v", err)
-			continue
-		}
-
-		totalGames++
-		if event.Winner == "P1" {
-			p1Wins++
-		} else if event.Winner == "P2" {
-			p2Wins++
-		}
-
-		fmt.Printf("Event Received: Game %s ended. Winner: %s\n", event.GameID, event.Winner)
-		fmt.Printf("--- Live Stats ---\n")
-		fmt.Printf("Total Games: %d\n", totalGames)
-		fmt.Printf("P1 Wins: %d (%.1f%%)\n", p1Wins, float64(p1Wins)/float64(totalGames)*100)
-		fmt.Printf("P2 Wins: %d (%.1f%%)\n", p2Wins, float64(p2Wins)/float64(totalGames)*100)
-		fmt.Printf("------------------\n")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
 
-	if err := r.Close(); err != nil {
-		log.Fatal("failed to close reader:", err)
-	}
+	http.HandleFunc("/events", eventHandler)
+	http.HandleFunc("/health", healthHandler)
+
+	log.Println("Analytics Service Started on port", port)
+
+	// 🔴 THIS LINE IS REQUIRED — without it Render will kill the app
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
