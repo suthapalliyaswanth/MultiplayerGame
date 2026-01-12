@@ -11,9 +11,7 @@ services:
       - key: PORT
         value: 10000
       - key: DATABASE_URL
-        fromDatabase:
-          name: multiplayer-db
-          property: connectionString
+        sync: false # Set this in Render Dashboard (e.g. from Neon)
 
   # Frontend Service
   - type: web
@@ -26,12 +24,5 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://replace-me-with-backend-url.onrender.com # Update this in Render Dashboard after deployment
-
-databases:
-  # Postgres Database
-  - name: multiplayer-db
-    region: singapore
-    databaseName: gamedb
-    user: user
 
 version: "1"
